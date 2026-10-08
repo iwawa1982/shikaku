@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>○×問題の採点結果</title>
+</head>
+
+<body>
+
+    <h1>○×問題の採点結果</h1>
+
+    <hr>
+
+    <!-- 採点結果 -->
+    <h2 th:if="${isCorrect}" style="color: blue;">
+        ○ 正解です！
+    </h2>
+
+    <h2 th:unless="${isCorrect}" style="color: red;">
+        × 不正解です
+    </h2>
+
+    <hr>
+
+    <h3>問題文</h3>
+    <p th:text="${choice.choiceText}"></p>
+
+    <h3>あなたの解答</h3>
+    <p th:text="${userAnswer ? '○ 正しい' : '× 誤り'}"></p>
+
+    <h3>正解</h3>
+    <p th:text="${correctAnswer ? '○ 正しい' : '× 誤り'}"></p>
+
+    <hr>
+
+    <h3>選択肢の解説</h3>
+    <p th:text="${choice.choiceExplanation}"></p>
+
+    <hr>
+
+    <p>
+        <a th:href="@{/questions/{id}/true-false(id=${question.id})}">
+            もう一度○×問題を解く
+        </a>
+    </p>
+
+    <p>
+        <a th:href="@{/questions/{id}(id=${question.id})}">
+            4択問題に戻る
+        </a>
+    </p>
+
+    <p>
+        <a th:href="@{/questions}">
+            問題一覧へ戻る
+        </a>
+    </p>
+
+</body>
+</html>

@@ -65,4 +65,59 @@ public interface QuestionMapper {
             """)
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(Question question);
+
+    /**
+     * 問題IDを指定して、問題を1件取得する。
+     *
+     * @param id 問題ID
+     * @return 指定された問題
+     */
+    @Select("""
+            SELECT
+                id,
+                qualification_id AS qualificationId,
+                category_id AS categoryId,
+                year,
+                question_no AS questionNo,
+                question_text AS questionText,
+                correct_choice_no AS correctChoiceNo,
+                explanation
+            FROM questions
+            WHERE id = #{id}
+            """)
+    Question findById(Integer id);
+
+    /**
+     * 直近の4択解答が不正解だった問題を取得する。
+     *
+     * 各問題の最新の解答履歴を調べ、
+     * 不正解だった問題だけを取得する。
+     *
+     * @return 復習対象の問題一覧
+     */
+    @Select("""
+            SELECT
+                q.id,
+                q.qualification_id AS qualificationId,
+                q.category_id AS categoryId,
+                q.year,
+                q.question_no AS questionNo,
+                q.question_text AS questionText,
+                q.correct_choice_no AS correctChoiceNo,
+                q.explanation
+            FROM questions q
+            INNER JOIN LATERAL (
+                SELECT
+                    ah.is_correct
+                FROM answer_history ah
+                WHERE ah.question_id = q.id
+                  AND ah.mode = 'FOUR_CHOICE'
+                ORDER BY ah.answered_at DESC, ah.id DESC
+                LIMIT 1
+            ) latest ON true
+            WHERE latest.is_correct = false
+            ORDER BY q.year DESC, q.question_no ASC
+            """)
+    List<Question> findQuestionsToReview();
+
 }

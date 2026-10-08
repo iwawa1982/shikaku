@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>復習問題一覧</title>
+</head>
+
+<body>
+
+    <h1>復習問題一覧</h1>
+
+    <p>直近の解答が不正解だった問題を表示します。</p>
+
+    <hr>
+
+    <a th:href="@{/questions}">問題一覧へ戻る</a>
+
+    <hr>
+
+    <!-- 復習対象の問題がない場合 -->
+    <p th:if="${#lists.isEmpty(questions)}">
+        現在、復習対象の問題はありません。
+    </p>
+
+    <!-- 復習対象の問題がある場合 -->
+    <table th:unless="${#lists.isEmpty(questions)}"
+           border="1" cellpadding="8">
+
+        <thead>
+            <tr>
+                <th>年度</th>
+                <th>問題番号</th>
+                <th>問題文</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="question : ${questions}">
+
+                <td th:text="${question.year}"></td>
+
+                <td th:text="${question.questionNo}"></td>
+
+                <td th:text="${question.questionText}"></td>
+
+                <td>
+                    <a th:href="@{/questions/{id}(id=${question.id})}">
+                        解き直す
+                    </a>
+                </td>
+
+            </tr>
+        </tbody>
+
+    </table>
+
+</body>
+</html>

@@ -1,0 +1,102 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>採点結果</title>
+</head>
+
+<body>
+
+    <h1>採点結果</h1>
+
+    <hr>
+
+    <!-- 年度・問題番号 -->
+    <h2>
+        <span th:text="${question.year}"></span>年度
+        問<span th:text="${question.questionNo}"></span>
+    </h2>
+
+    <!-- 問題文 -->
+    <h3>問題文</h3>
+
+    <p th:text="${question.questionText}"></p>
+
+    <hr>
+
+    <!-- 正解・不正解の判定 -->
+    <h2 th:if="${isCorrect}" style="color: blue;">
+        ○ 正解です！
+    </h2>
+
+    <h2 th:unless="${isCorrect}" style="color: red;">
+        × 不正解です
+    </h2>
+
+    <!-- ユーザーが選択した番号 -->
+    <p>
+        あなたの解答：
+        <strong th:text="${selectedChoiceNo}"></strong>
+    </p>
+
+    <!-- 正解番号 -->
+    <p>
+        正解番号：
+        <strong th:text="${question.correctChoiceNo}"></strong>
+    </p>
+
+    <hr>
+
+    <!-- 選択肢と解説 -->
+    <h3>選択肢ごとの解説</h3>
+
+    <div th:each="choice : ${choices}">
+
+        <h4>
+            選択肢
+            <span th:text="${choice.choiceNo}"></span>
+        </h4>
+
+        <!-- 選択肢の文章 -->
+        <p th:text="${choice.choiceText}"></p>
+
+        <!-- 記述そのものの正誤 -->
+        <p>
+            記述の正誤：
+            <strong
+                th:text="${choice.isStatementCorrect == true ? '〇' : (choice.isStatementCorrect == false ? '×' : '未設定')}">
+            </strong>
+        </p>
+
+        <!-- 選択肢の解説 -->
+        <p th:text="${choice.choiceExplanation}"></p>
+
+        <hr>
+
+    </div>
+
+    <!-- 問題全体の解説 -->
+    <h3>問題全体の解説</h3>
+
+    <p th:text="${question.explanation}"></p>
+
+    <hr>
+
+    <!-- 同じ問題をもう一度解く -->
+    <p>
+        <a th:href="@{/questions/{id}(id=${question.id})}">
+            もう一度解く
+        </a>
+    </p>
+
+    <!-- 問題一覧に戻る -->
+    <p>
+        <a th:href="@{/questions}">
+            問題一覧へ戻る
+        </a>
+    </p>
+
+</body>
+</html>

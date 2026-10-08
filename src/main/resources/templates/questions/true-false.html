@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>○×問題</title>
+</head>
+
+<body>
+
+    <h1>○×問題</h1>
+
+    <hr>
+
+    <!-- 元の問題情報 -->
+    <p>
+        年度：
+        <span th:text="${question.year}"></span>
+    </p>
+
+    <p>
+        問題番号：
+        <span th:text="${question.questionNo}"></span>
+    </p>
+
+    <hr>
+
+    <h2>次の記述は正しいでしょうか？</h2>
+
+    <!-- 選択肢の文章を表示 -->
+    <p th:text="${choice.choiceText}"></p>
+
+    <hr>
+
+    <!-- ○×解答フォーム -->
+    <form th:action="@{/questions/{id}/true-false/answer(id=${question.id})}"
+          method="post">
+
+        <!-- どの選択肢に解答したかを送信 -->
+        <input type="hidden"
+               name="choiceId"
+               th:value="${choice.id}">
+
+        <!-- ○を選択 -->
+        <label>
+            <input type="radio"
+                   name="userAnswer"
+                   value="true"
+                   required>
+            ○ 正しい
+        </label>
+
+        <br><br>
+
+        <!-- ×を選択 -->
+        <label>
+            <input type="radio"
+                   name="userAnswer"
+                   value="false"
+                   required>
+            × 誤り
+        </label>
+
+        <br><br>
+
+        <button type="submit">解答する</button>
+
+    </form>
+
+    <hr>
+
+    <!-- 元の4択問題へ戻る -->
+    <p>
+        <a th:href="@{/questions/{id}(id=${question.id})}">
+            4択問題に戻る
+        </a>
+    </p>
+
+    <p>
+        <a th:href="@{/questions}">
+            問題一覧へ戻る
+        </a>
+    </p>
+
+</body>
+</html>

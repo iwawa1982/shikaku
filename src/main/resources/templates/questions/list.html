@@ -13,7 +13,7 @@
 
     <hr>
 
-    <!-- 画面移動用のリンク -->
+    <!-- 画面移動用リンク -->
     <nav>
         <a th:href="@{/questions}">問題一覧</a>
         ｜
@@ -24,12 +24,12 @@
 
     <h2>登録済みの問題</h2>
 
-    <!-- 問題が登録されていない場合 -->
+    <!-- 問題がない場合 -->
     <p th:if="${#lists.isEmpty(questions)}">
         現在、問題は登録されていません。
     </p>
 
-    <!-- 問題が登録されている場合 -->
+    <!-- 問題がある場合 -->
     <table th:unless="${#lists.isEmpty(questions)}"
            border="1" cellpadding="8">
 
@@ -38,27 +38,64 @@
                 <th>年度</th>
                 <th>問題番号</th>
                 <th>問題文</th>
+                <th>直近3回の解答履歴</th>
             </tr>
         </thead>
 
         <tbody>
+
             <!-- 問題を1件ずつ表示 -->
             <tr th:each="question : ${questions}">
 
+                <!-- 年度 -->
                 <td th:text="${question.year}"></td>
 
+                <!-- 問題番号 -->
                 <td th:text="${question.questionNo}"></td>
 
-                <td th:text="${question.questionText}"></td>
+                <!-- 問題詳細へのリンク -->
+                <td>
+                    <a th:href="@{/questions/{id}(id=${question.id})}"
+                       th:text="${question.questionText}">
+                    </a>
+                </td>
+
+                <!-- 直近3回の解答履歴 -->
+                <td>
+
+                    <!-- 履歴がない場合 -->
+                    <span th:if="${#lists.isEmpty(historyMap[question.id])}">
+                        未解答
+                    </span>
+
+                    <!-- 履歴がある場合 -->
+                    <span th:each="history : ${historyMap[question.id]}">
+
+                        <!-- 正解 -->
+                        <strong th:if="${history.isCorrect}"
+                                style="color: blue;">
+                            ○
+                        </strong>
+
+                        <!-- 不正解 -->
+                        <strong th:unless="${history.isCorrect}"
+                                style="color: red;">
+                            ×
+                        </strong>
+
+                    </span>
+
+                </td>
 
             </tr>
+
         </tbody>
 
     </table>
 
     <hr>
 
-    <!-- 登録画面へのリンク -->
+    <!-- 新規登録へのリンク -->
     <p>
         <a th:href="@{/questions/new}">
             ＋ 新しい問題を登録する
