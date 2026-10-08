@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>問題登録</title>
+</head>
+
+<body>
+
+    <h1>問題登録</h1>
+
+    <hr>
+
+    <!-- 入力フォーム -->
+    <form th:action="@{/questions}"
+          th:object="${questionForm}"
+          method="post">
+
+        <!-- 資格ID -->
+        <p>
+            <label>資格ID：</label>
+            <input type="number" th:field="*{qualificationId}">
+
+            <span th:errors="*{qualificationId}"
+                  style="color:red"></span>
+        </p>
+
+        <!-- 分野ID -->
+        <p>
+            <label>分野ID：</label>
+            <input type="number" th:field="*{categoryId}">
+
+            <span th:errors="*{categoryId}"
+                  style="color:red"></span>
+        </p>
+
+        <!-- 出題年度 -->
+        <p>
+            <label>出題年度：</label>
+            <input type="number" th:field="*{year}">
+
+            <span th:errors="*{year}"
+                  style="color:red"></span>
+        </p>
+
+        <!-- 問題番号 -->
+        <p>
+            <label>問題番号：</label>
+            <input type="number" th:field="*{questionNo}">
+
+            <span th:errors="*{questionNo}"
+                  style="color:red"></span>
+        </p>
+
+        <!-- 問題文 -->
+        <p>
+            <label>問題文：</label>
+
+            <textarea th:field="*{questionText}"
+                      rows="5" cols="60"></textarea>
+
+            <span th:errors="*{questionText}"
+                  style="color:red"></span>
+        </p>
+
+        <!-- 4択問題の正解番号 -->
+        <p>
+            <label>正解番号：</label>
+
+            <select th:field="*{correctChoiceNo}">
+                <option value="">選択してください</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+            </select>
+
+            <span th:errors="*{correctChoiceNo}"
+                  style="color:red"></span>
+        </p>
+
+        <!-- 問題全体の解説 -->
+        <p>
+            <label>問題全体の解説：</label>
+
+            <textarea th:field="*{explanation}"
+                      rows="5" cols="60"></textarea>
+        </p>
+
+        <hr>
+
+        <h2>選択肢の登録</h2>
+
+        <!-- 選択肢1～4を繰り返し表示 -->
+        <div th:each="choice, stat : *{choices}">
+
+            <h3 th:text="'選択肢' + ${stat.count}"></h3>
+
+            <!-- 選択肢の文章 -->
+            <p>
+                <label>選択肢の文章：</label>
+
+                <textarea
+                    th:field="*{choices[__${stat.index}__].choiceText}"
+                    rows="3" cols="60"></textarea>
+
+                <span
+                    th:errors="*{choices[__${stat.index}__].choiceText}"
+                    style="color:red"></span>
+            </p>
+
+            <!-- 記述そのものの正誤 -->
+            <p>
+                <label>記述の正誤：</label>
+
+                <select
+                    th:field="*{choices[__${stat.index}__].isStatementCorrect}">
+
+                    <option value="">選択してください</option>
+                    <option value="true">〇 正しい</option>
+                    <option value="false">× 誤り</option>
+                </select>
+
+                <span
+                    th:errors="*{choices[__${stat.index}__].isStatementCorrect}"
+                    style="color:red"></span>
+            </p>
+
+            <!-- 選択肢ごとの解説 -->
+            <p>
+                <label>選択肢の解説：</label>
+
+                <textarea
+                    th:field="*{choices[__${stat.index}__].choiceExplanation}"
+                    rows="3" cols="60"></textarea>
+            </p>
+
+            <hr>
+
+        </div>
+
+        <!-- 登録ボタン -->
+        <button type="submit">登録する</button>
+
+    </form>
+
+    <!-- 入力チェック成功時のメッセージ -->
+    <p th:if="${message}"
+       th:text="${message}"
+       style="color:green"></p>
+
+    <hr>
+
+    <a th:href="@{/questions}">問題一覧へ戻る</a>
+
+</body>
+</html>

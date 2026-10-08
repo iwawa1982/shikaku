@@ -1,0 +1,69 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>問題一覧</title>
+</head>
+
+<body>
+
+    <h1>資格試験 問題一覧</h1>
+
+    <hr>
+
+    <!-- 画面移動用のリンク -->
+    <nav>
+        <a th:href="@{/questions}">問題一覧</a>
+        ｜
+        <a th:href="@{/questions/new}">問題を新規登録</a>
+    </nav>
+
+    <hr>
+
+    <h2>登録済みの問題</h2>
+
+    <!-- 問題が登録されていない場合 -->
+    <p th:if="${#lists.isEmpty(questions)}">
+        現在、問題は登録されていません。
+    </p>
+
+    <!-- 問題が登録されている場合 -->
+    <table th:unless="${#lists.isEmpty(questions)}"
+           border="1" cellpadding="8">
+
+        <thead>
+            <tr>
+                <th>年度</th>
+                <th>問題番号</th>
+                <th>問題文</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <!-- 問題を1件ずつ表示 -->
+            <tr th:each="question : ${questions}">
+
+                <td th:text="${question.year}"></td>
+
+                <td th:text="${question.questionNo}"></td>
+
+                <td th:text="${question.questionText}"></td>
+
+            </tr>
+        </tbody>
+
+    </table>
+
+    <hr>
+
+    <!-- 登録画面へのリンク -->
+    <p>
+        <a th:href="@{/questions/new}">
+            ＋ 新しい問題を登録する
+        </a>
+    </p>
+
+</body>
+</html>
