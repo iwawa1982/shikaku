@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Select;
 @Mapper
 public interface DatabaseTestMapper {
 
-    @Select("SELECT COUNT(*) FROM questions")
-    int countQuestions();
+@Select("SELECT COUNT(*) FROM questions")
+ int countQuestions();
+
+
 }
